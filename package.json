@@ -1,0 +1,49 @@
+{
+  "name": "fanqie-dashboard",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Fanqie music analytics dashboard backed by PostgreSQL.",
+  "type": "module",
+  "main": "electron/main.js",
+  "scripts": {
+    "start": "node mvp/server.js",
+    "export:html": "node mvp/scripts/export-static-html.js",
+    "electron": "electron .",
+    "dist:win": "electron-builder --win portable --x64"
+  },
+  "dependencies": {
+    "pg": "^8.13.1"
+  },
+  "devDependencies": {
+    "electron": "^31.7.7",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.qiyin.fanqie.dashboard",
+    "productName": "番茄IP数据看板",
+    "asar": true,
+    "files": [
+      "electron/**/*",
+      "mvp/**/*",
+      "package.json",
+      ".env.local"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "番茄IP数据看板-${version}-${arch}.${ext}"
+    },
+    "directories": {
+      "output": "dist"
+    }
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

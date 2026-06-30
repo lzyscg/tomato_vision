@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>番茄 IP 数据看板</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Fanqie Music Analytics</p>
+          <h1>番茄 IP 数据看板</h1>
+        </div>
+        <div class="topbar-meta">
+          <span id="dateRange">采集区间 --</span>
+          <span id="generatedAt">数据生成 --</span>
+          <button class="sync-button" id="syncButton" type="button">刷新数据</button>
+          <button class="stop-button" id="stopServerButton" type="button">关闭服务</button>
+          <span class="sync-status" id="syncStatus" aria-live="polite">就绪</span>
+        </div>
+      </header>
+
+      <section class="summary-strip" aria-label="数据概览">
+        <div class="metric-block">
+          <span class="metric-label">歌手数</span>
+          <strong id="singerCount">--</strong>
+        </div>
+        <div class="metric-block">
+          <span class="metric-label">总粉丝数</span>
+          <strong id="snapshotCount">--</strong>
+        </div>
+        <div class="metric-block">
+          <span class="metric-label">测试周期</span>
+          <strong id="badLikeCount">--</strong>
+        </div>
+        <div class="metric-block">
+          <span class="metric-label">当前选中</span>
+          <strong id="currentSinger">--</strong>
+        </div>
+      </section>
+
+      <section class="date-controls" aria-label="趋势日期范围">
+        <div>
+          <p class="section-kicker">趋势区间</p>
+          <h2>日期选择</h2>
+        </div>
+        <div class="date-fields">
+          <label class="field date-field">
+            <span>起始日期</span>
+            <input id="startDateInput" type="date" />
+          </label>
+          <label class="field date-field">
+            <span>结束日期</span>
+            <input id="endDateInput" type="date" />
+          </label>
+          <button class="ghost-button" id="resetDateButton" type="button">重置区间</button>
+        </div>
+      </section>
+
+      <section class="page is-active" id="singerPage">
+        <div class="page-inner">
+          <div class="pane-header page-title-row">
+            <div>
+              <p class="section-kicker">第一层</p>
+              <h2>歌手粉丝趋势</h2>
+            </div>
+            <div class="page-controls">
+              <label class="field filter-field">
+                <span>搜索歌手</span>
+                <input id="searchInput" type="search" placeholder="输入歌手名" />
+              </label>
+              <label class="field filter-field small">
+                <span>风格</span>
+                <select id="styleFilter">
+                  <option value="all">全部风格</option>
+                </select>
+              </label>
+              <p class="page-note">点击歌手进入歌曲收藏趋势</p>
+            </div>
+          </div>
+
+          <div class="singer-card-scroll">
+            <div class="singer-card-grid" id="singerGrid"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="songPage">
+        <div class="detail-pane">
+          <div class="detail-head">
+            <div>
+              <p class="section-kicker">第二层</p>
+              <h2 id="detailTitle">选择一个歌手</h2>
+            </div>
+            <div class="detail-actions">
+              <div class="detail-meta" id="detailMeta"></div>
+              <button class="ghost-button" id="backButton" type="button">返回歌手层</button>
+            </div>
+          </div>
+
+          <div class="detail-stats" id="detailStats"></div>
+
+          <div class="song-layout">
+            <section class="song-list-area">
+              <div class="subsection-head">
+                <h3>歌曲列表</h3>
+                <span id="songCountLabel">--</span>
+              </div>
+              <div class="table-wrap song-table-wrap">
+                <table class="data-table compact" id="songTable">
+                  <thead>
+                    <tr>
+                      <th>歌名</th>
+                      <th class="numeric">最新收藏</th>
+                      <th class="numeric">增量</th>
+                      <th>最新热度</th>
+                      <th class="numeric">点数</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </section>
+
+            <section class="chart-area">
+              <div class="subsection-head chart-head">
+                <div>
+                  <h3 id="chartTitle">收藏趋势</h3>
+                  <span id="chartSubtitle">点击歌曲后查看折线图</span>
+                </div>
+                <label class="toggle">
+                  <input id="annotationToggle" type="checkbox" checked />
+                  <span>点位注释</span>
+                </label>
+              </div>
+              <div class="chart-box">
+                <svg id="lineChart" role="img" aria-label="歌曲收藏折线图"></svg>
+                <div id="emptyChart" class="empty-state">请选择一首歌曲</div>
+                <div id="tooltip" class="tooltip" hidden></div>
+              </div>
+              <div class="snapshot-table" id="snapshotTable"></div>
+            </section>
+          </div>
+        </div>
+      </section>
+      <div id="fanTooltip" class="tooltip fan-floating-tooltip" hidden></div>
+    </main>
+    <script src="./app.js"></script>
+  </body>
+</html>
